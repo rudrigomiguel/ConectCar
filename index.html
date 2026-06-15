@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAVA | Dashboard Executivo — ConectCar LP Consórcio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f8f7f4;
+    --border: rgba(0,0,0,0.10);
+    --border2: rgba(0,0,0,0.18);
+    --text1: #1a1a1a;
+    --text2: #5a5a5a;
+    --text3: #999;
+    --blue: #185FA5;
+    --blue-bg: #E6F1FB;
+    --blue-text: #0C447C;
+    --green: #3B6D11;
+    --green-bg: #EAF3DE;
+    --green-text: #27500A;
+    --amber: #854F0B;
+    --amber-bg: #FAEEDA;
+    --amber-text: #633806;
+    --red: #A32D2D;
+    --red-bg: #FCEBEB;
+    --red-text: #791F1F;
+    --purple: #534AB7;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --teal: #0F6E56;
+    --teal-bg: #E1F5EE;
+    --teal-text: #085041;
+    --coral: #993C1D;
+    --coral-bg: #FAECE7;
+    --coral-text: #712B13;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --surface: #242422;
+      --surface2: #2c2c2a;
+      --border: rgba(255,255,255,0.10);
+      --border2: rgba(255,255,255,0.18);
+      --text1: #f0ede8;
+      --text2: #b0ada8;
+      --text3: #777;
+      --blue-bg: #0c2a48;
+      --blue-text: #85B7EB;
+      --green-bg: #172604;
+      --green-text: #C0DD97;
+      --amber-bg: #311a03;
+      --amber-text: #FAC775;
+      --red-bg: #2d0f0f;
+      --red-text: #F09595;
+      --purple-bg: #1a1740;
+      --purple-text: #AFA9EC;
+      --teal-bg: #042018;
+      --teal-text: #5DCAA5;
+      --coral-bg: #2a0d04;
+      --coral-text: #F0997B;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text1); font-size: 14px; line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Layout */
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+  /* Header */
+  .header { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+  .header-left h1 { font-size: 18px; font-weight: 500; }
+  .header-left p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .header-right { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .badge { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
+  .badge-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .badge-green { background: var(--green-bg); color: var(--green-text); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .badge-red { background: var(--red-bg); color: var(--red-text); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .badge-coral { background: var(--coral-bg); color: var(--coral-text); }
+
+  /* Cards */
+  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px 20px; }
+  .card-title { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .metric { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 16px; }
+  .metric-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .metric-value { font-size: 22px; font-weight: 500; }
+  .metric-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* Section header */
+  .sec { font-size: 13px; font-weight: 500; color: var(--text2); margin: 24px 0 12px; display: flex; align-items: center; gap: 6px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+
+  /* Gantt */
+  .gantt-wrap { overflow-x: auto; }
+  .gantt { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 780px; }
+  .gantt th { background: var(--surface2); padding: 7px 8px; text-align: left; font-weight: 500; color: var(--text2); border-bottom: 0.5px solid var(--border2); white-space: nowrap; position: sticky; top: 0; }
+  .gantt td { padding: 5px 8px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+  .gantt tr:hover td { background: var(--surface2); }
+  .gantt-bar { height: 10px; border-radius: 3px; background: var(--blue); opacity: 0.85; }
+  .gantt-marco { width: 10px; height: 10px; background: var(--amber); border-radius: 2px; transform: rotate(45deg); display: inline-block; }
+  .gantt-empty { height: 10px; }
+  .week-header { text-align: center; font-size: 11px; }
+  .frente-chip { font-size: 10px; padding: 2px 6px; border-radius: 10px; white-space: nowrap; }
+  .phase-badge { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: var(--border2); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); border: 2px solid var(--surface); }
+  .tl-dot.marco { background: var(--amber); border-radius: 2px; transform: rotate(45deg); top: 2px; }
+  .tl-week { font-size: 11px; font-weight: 500; color: var(--text3); margin-bottom: 2px; }
+  .tl-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .tl-desc { font-size: 12px; color: var(--text2); }
+  .tl-deliverable { font-size: 11px; color: var(--teal-text); background: var(--teal-bg); padding: 2px 7px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+
+  /* Pendências */
+  .pend-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pend-table th { background: var(--surface2); padding: 7px 10px; text-align: left; font-weight: 500; color: var(--text2); border-bottom: 0.5px solid var(--border2); }
+  .pend-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; }
+  .pend-table tr:hover td { background: var(--surface2); }
+
+  /* Tabs */
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; border-bottom: 0.5px solid var(--border); padding-bottom: 0; }
+  .tab { padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: var(--radius-sm) var(--radius-sm) 0 0; transition: color .15s; }
+  .tab:hover { color: var(--text1); background: var(--surface2); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 500; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Scope */
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .scope-grid { grid-template-columns: 1fr; } }
+  .scope-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 12.5px; }
+  .scope-item:last-child { border: none; }
+  .scope-icon { flex-shrink: 0; margin-top: 1px; }
+
+  /* Integrações */
+  .integ-card { background: var(--surface2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+  .integ-name { font-size: 13px; font-weight: 500; }
+  .integ-desc { font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+  /* Progress bar */
+  .prog-bar { background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; margin-top: 6px; }
+  .prog-fill { height: 100%; border-radius: 4px; background: var(--blue); transition: width .4s; }
+
+  /* Caminho crítico */
+  .cc-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .cc-row:last-child { border: none; }
+  .cc-num { font-size: 11px; font-weight: 500; color: var(--text3); min-width: 20px; }
+  .cc-body { flex: 1; }
+  .cc-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .cc-meta { font-size: 11px; color: var(--text2); display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* Risks */
+  .risk-item { padding: 10px 14px; border-left: 3px solid var(--amber); background: var(--amber-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 8px; }
+  .risk-title { font-size: 13px; font-weight: 500; color: var(--amber-text); }
+  .risk-mitig { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .tabs { display: none; }
+    .tab-content { display: block !important; page-break-inside: avoid; }
+    .gantt-wrap { overflow: visible; }
+  }
+
+  @media (max-width: 640px) {
+    .header { flex-direction: column; align-items: flex-start; }
+    .grid4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Hero banner */
+  .hero-banner {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 0.5px solid var(--border);
+  }
+  .hero-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+  }
+  .hero-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10,30,60,0.82) 0%, rgba(10,30,60,0.45) 55%, rgba(10,30,60,0.10) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 28px 36px;
+  }
+  .hero-banner-overlay h2 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .hero-banner-overlay p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.80);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+  .hero-banner-overlay .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .hero-badge {
+    background: rgba(255,255,255,0.15);
+    border: 0.5px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Offer image cards */
+  .offer-img-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+    background: var(--surface);
+  }
+  .offer-img-card .img-wrap {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+  }
+  .offer-img-card .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .offer-img-card:hover .img-wrap img { transform: scale(1.04); }
+  .offer-img-card .img-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.65) 0%, transparent 100%);
+    padding: 16px 12px 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .offer-img-card .img-body {
+    padding: 12px 14px;
+  }
+  .offer-img-card .img-body p {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* Visual strip */
+  .img-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .img-strip-item {
+    position: relative;
+    height: 130px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .img-strip-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .img-strip-item .strip-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.70) 0%, transparent 100%);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 14px 10px 7px;
+  }
+
+  /* Feature image block */
+  .feat-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border);
+    display: block;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 640px) {
+    .hero-banner { height: 160px; }
+    .hero-banner-overlay { padding: 18px 20px; }
+    .hero-banner-overlay h2 { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1><i class="ti ti-layout-dashboard" aria-hidden="true" style="font-size:18px; vertical-align:-2px; margin-right:6px; color:var(--blue)"></i>CAVA | Dashboard Executivo — ConectCar LP Consórcio</h1>
+      <p>Landing Page de Captação de Leads com OTP WhatsApp + Simulação Dinâmica &nbsp;·&nbsp; Data-base: 10/06/2026</p>
+    </div>
+    <div class="header-right">
+      <span class="badge badge-blue"><i class="ti ti-calendar" aria-hidden="true"></i>8 semanas</span>
+      <span class="badge badge-purple"><i class="ti ti-clock" aria-hidden="true"></i>39 dias úteis</span>
+      <span class="badge badge-teal"><i class="ti ti-currency-dollar" aria-hidden="true"></i>R$ 35.000</span>
+      <span class="badge badge-amber"><i class="ti ti-flag" aria-hidden="true"></i>Término 03/08/2026</span>
+      <span class="badge badge-green"><i class="ti ti-check" aria-hidden="true"></i>Planejado</span>
+    </div>
+  </div>
+
+  <!-- HERO BANNER -->
+  <div class="hero-banner" style="height:280px">
+    <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1800&q=90" alt="Carro premium consórcio" loading="eager" style="object-position:center 55%">
+    <div class="hero-banner-overlay" style="background:linear-gradient(90deg,rgba(5,15,35,0.90) 0%,rgba(5,15,35,0.55) 50%,rgba(5,15,35,0.05) 100%)">
+      <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px">CAVA · Dashboard Executivo</div>
+      <h2 style="font-size:26px;line-height:1.2;margin-bottom:8px">ConectCar | LP Consórcio</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,0.78);max-width:440px;line-height:1.65">Captação de leads qualificados com OTP via WhatsApp, simulação dinâmica e envio à stack operacional — Porto e Itaú, automóvel e imóvel.</p>
+      <div class="hero-badges" style="margin-top:16px">
+        <span class="hero-badge"><i class="ti ti-car" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>Porto Automóvel</span>
+        <span class="hero-badge"><i class="ti ti-building" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>Porto Imóvel</span>
+        <span class="hero-badge"><i class="ti ti-car" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>Itaú Automóvel</span>
+        <span class="hero-badge"><i class="ti ti-building" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>Itaú Imóvel</span>
+        <span class="hero-badge" style="background:rgba(24,95,165,0.45);border-color:rgba(133,183,235,0.5)"><i class="ti ti-calendar" style="font-size:11px;vertical-align:-1px;margin-right:3px"></i>8 semanas · 03/08/2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('overview')"><i class="ti ti-home" aria-hidden="true"></i> Visão Geral</div>
+    <div class="tab" onclick="switchTab('gantt')"><i class="ti ti-chart-gantt" aria-hidden="true"></i> Gantt</div>
+    <div class="tab" onclick="switchTab('timeline')"><i class="ti ti-timeline" aria-hidden="true"></i> Timeline</div>
+    <div class="tab" onclick="switchTab('pendencias')"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Pendências</div>
+    <div class="tab" onclick="switchTab('critico')"><i class="ti ti-route" aria-hidden="true"></i> Caminho Crítico</div>
+    <div class="tab" onclick="switchTab('escopo')"><i class="ti ti-list-check" aria-hidden="true"></i> Escopo &amp; Premissas</div>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div id="tab-overview" class="tab-content active">
+
+    <!-- Métricas principais -->
+    <div class="grid4" style="margin-bottom:20px">
+      <div class="metric">
+        <div class="metric-label">Investimento total</div>
+        <div class="metric-value" style="color:var(--blue)">R$ 35.000</div>
+        <div class="metric-sub">Discovery → Implantação</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Duração do projeto</div>
+        <div class="metric-value">39 dias</div>
+        <div class="metric-sub">10/06 – 03/08/2026</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Atividades totais</div>
+        <div class="metric-value">31</div>
+        <div class="metric-sub">22 tarefas · 9 marcos</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Pendências abertas</div>
+        <div class="metric-value" style="color:var(--amber)">13</div>
+        <div class="metric-sub">Prioridade alta: 11</div>
+      </div>
+    </div>
+
+    <!-- Galeria visual temática -->
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:160px 160px;gap:10px;margin-bottom:22px;border-radius:var(--radius);overflow:hidden">
+      <!-- carro grande à esquerda, span 2 linhas -->
+      <div style="grid-row:1/3;position:relative;overflow:hidden;border-radius:var(--radius)">
+        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=85" alt="Carro de luxo consórcio" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s ease">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.60) 0%,transparent 55%)"></div>
+        <div style="position:absolute;bottom:14px;left:16px">
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px">Consórcio de automóvel</div>
+          <div style="font-size:15px;font-weight:500;color:#fff">Realize o carro dos seus sonhos</div>
+        </div>
+      </div>
+      <!-- casa moderna topo direita -->
+      <div style="position:relative;overflow:hidden;border-radius:var(--radius)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=85" alt="Casa moderna consórcio imóvel" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 40%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:9px;left:12px;font-size:12px;font-weight:500;color:#fff">Casa dos sonhos</div>
+      </div>
+      <!-- apartamento alto padrão topo direita 2 -->
+      <div style="position:relative;overflow:hidden;border-radius:var(--radius)">
+        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=85" alt="Apartamento alto padrão" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 30%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:9px;left:12px;font-size:12px;font-weight:500;color:#fff">Apartamento premium</div>
+      </div>
+      <!-- SUV/ sedan baixo centro -->
+      <div style="position:relative;overflow:hidden;border-radius:var(--radius)">
+        <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=85" alt="SUV premium consórcio" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 60%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:9px;left:12px;font-size:12px;font-weight:500;color:#fff">SUV alto padrão</div>
+      </div>
+      <!-- mansão / villa baixo direita -->
+      <div style="position:relative;overflow:hidden;border-radius:var(--radius)">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=85" alt="Mansão villa piscina consórcio" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 45%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.55) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:9px;left:12px;font-size:12px;font-weight:500;color:#fff">Casa com piscina</div>
+      </div>
+    </div>
+
+    <!-- Visão geral do projeto -->
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-bulb" aria-hidden="true"></i> Visão do projeto</div>
+        <p style="font-size:13px; color:var(--text2); margin-bottom:12px;">Criação de landing page integrada ao site e app da ConectCar para captação de leads de consórcio com quatro combinações de oferta, validação OTP via WhatsApp, cálculo dinâmico e envio do lead validado à stack operacional com rastreabilidade.</p>
+        <p style="font-size:13px; color:var(--text2)">Resultado esperado: reduzir atrito na jornada, qualificar melhor o lead, controlar origem da oferta e preparar a arquitetura para futuras integrações digitais.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-target" aria-hidden="true"></i> Objetivos estratégicos</div>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <div class="scope-item"><i class="ti ti-check" aria-hidden="true" class="scope-icon" style="color:var(--green); font-size:14px; margin-top:1px"></i><span>Landing page premium consistente com presença digital da marca</span></div>
+          <div class="scope-item"><i class="ti ti-check" aria-hidden="true" class="scope-icon" style="color:var(--green); font-size:14px; margin-top:1px"></i><span>Jornada simples, objetiva e confiável para o usuário</span></div>
+          <div class="scope-item"><i class="ti ti-check" aria-hidden="true" class="scope-icon" style="color:var(--green); font-size:14px; margin-top:1px"></i><span>Captação qualificada antes do envio operacional</span></div>
+          <div class="scope-item"><i class="ti ti-check" aria-hidden="true" class="scope-icon" style="color:var(--green); font-size:14px; margin-top:1px"></i><span>Leitura comportamental via Microsoft Clarity</span></div>
+          <div class="scope-item"><i class="ti ti-check" aria-hidden="true" class="scope-icon" style="color:var(--green); font-size:14px; margin-top:1px"></i><span>Arquitetura preparada para futuras integrações digitais</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fases do projeto -->
+    <div class="sec"><i class="ti ti-layers" aria-hidden="true"></i> Fases do projeto</div>
+    <div class="grid3" style="margin-bottom:20px">
+      <div class="card" style="border-top: 3px solid var(--blue)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-blue">Iniciação</span>
+          <span style="font-size:11px; color:var(--text3)">Sem 1</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px">Discovery e levantamento</div>
+        <div style="font-size:12px; color:var(--text2)">Kickoff, entendimento de negócio, mapeamento de integrações, premissas e riscos</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+        <div style="font-size:11px; color:var(--text3); margin-top:4px">4 atividades · 2 marcos</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--purple)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-purple">Planejamento</span>
+          <span style="font-size:11px; color:var(--text3)">Sem 2–3</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px">UX e UI Design</div>
+        <div style="font-size:12px; color:var(--text2)">Arquitetura, wireframes, protótipo navegável, direção visual e handoff</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%; background:var(--purple)"></div></div>
+        <div style="font-size:11px; color:var(--text3); margin-top:4px">6 atividades · 2 marcos</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--teal)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-teal">Execução</span>
+          <span style="font-size:11px; color:var(--text3)">Sem 4–6</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px">Desenvolvimento & Integrações</div>
+        <div style="font-size:12px; color:var(--text2)">Front-end, API, banco, OTP/Gupshup, cálculo, envio operacional e telemetria</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%; background:var(--teal)"></div></div>
+        <div style="font-size:11px; color:var(--text3); margin-top:4px">10 atividades · 3 marcos</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--amber)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-amber">Monitoramento</span>
+          <span style="font-size:11px; color:var(--text3)">Sem 7</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px">QA e Homologação</div>
+        <div style="font-size:12px; color:var(--text2)">Testes funcionais, cenários de falha, ajustes UX/UI, revisão com stakeholders</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%; background:var(--amber)"></div></div>
+        <div style="font-size:11px; color:var(--text3); margin-top:4px">2 atividades · 1 marco</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--coral)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-coral">Encerramento</span>
+          <span style="font-size:11px; color:var(--text3)">Sem 8</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px">Entrega Assistida & Handover</div>
+        <div style="font-size:12px; color:var(--text2)">Checklist de implantação, documentação técnica, aceite final e encerramento</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%; background:var(--coral)"></div></div>
+        <div style="font-size:11px; color:var(--text3); margin-top:4px">2 atividades · 1 marco</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--red); background: var(--red-bg)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+          <span class="badge badge-red">Atenção</span>
+          <span style="font-size:11px; color:var(--text3)">Contínuo</span>
+        </div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px; color:var(--red-text)">Pontos críticos para diretoria</div>
+        <div style="font-size:12px; color:var(--text2)">Dependência de credenciais Gupshup · Aprovações formais · Custos terceiros · Critérios de aceite</div>
+      </div>
+    </div>
+
+    <!-- Ofertas do consórcio com imagem -->
+    <div class="sec"><i class="ti ti-cards" aria-hidden="true"></i> Combinações de oferta — 4 produtos</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:22px">
+
+      <div class="offer-img-card">
+        <div class="img-wrap" style="height:180px">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=700&q=85" alt="Porto Automóvel" loading="lazy">
+          <div class="img-label"><i class="ti ti-car" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Porto Automóvel</div>
+        </div>
+        <div class="img-body">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Consórcio Porto Auto</div>
+          <p>Parcelas acessíveis para conquistar o automóvel dos seus sonhos, sem juros. Parametrizado por backend na LP.</p>
+          <div style="margin-top:8px"><span class="badge badge-blue" style="font-size:10px">Porto Seguro</span></div>
+        </div>
+      </div>
+
+      <div class="offer-img-card">
+        <div class="img-wrap" style="height:180px">
+          <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=700&q=85" alt="Porto Imóvel" loading="lazy" style="object-position:center 40%">
+          <div class="img-label"><i class="ti ti-building" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Porto Imóvel</div>
+        </div>
+        <div class="img-body">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Consórcio Porto Imóvel</div>
+          <p>O caminho mais inteligente para conquistar a casa própria. Simulação dinâmica e envio à operação.</p>
+          <div style="margin-top:8px"><span class="badge badge-blue" style="font-size:10px">Porto Seguro</span></div>
+        </div>
+      </div>
+
+      <div class="offer-img-card">
+        <div class="img-wrap" style="height:180px">
+          <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=700&q=85" alt="Itaú Automóvel" loading="lazy" style="object-position:center 55%">
+          <div class="img-label"><i class="ti ti-car" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Itaú Automóvel</div>
+        </div>
+        <div class="img-body">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Consórcio Itaú Auto</div>
+          <p>Planos flexíveis para troca ou aquisição do seu veículo, integrado ao mesmo fluxo de captação da LP.</p>
+          <div style="margin-top:8px"><span class="badge badge-amber" style="font-size:10px">Itaú Unibanco</span></div>
+        </div>
+      </div>
+
+      <div class="offer-img-card">
+        <div class="img-wrap" style="height:180px">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=85" alt="Itaú Imóvel" loading="lazy" style="object-position:center 35%">
+          <div class="img-label"><i class="ti ti-building" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Itaú Imóvel</div>
+        </div>
+        <div class="img-body">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Consórcio Itaú Imóvel</div>
+          <p>Crédito para imóvel residencial ou comercial. Origem rastreada via parâmetros de campanha no link de entrada.</p>
+          <div style="margin-top:8px"><span class="badge badge-amber" style="font-size:10px">Itaú Unibanco</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Integrações -->
+    <div class="sec"><i class="ti ti-plug" aria-hidden="true"></i> Integrações obrigatórias</div>
+    <div class="grid4" style="margin-bottom:20px">
+      <div class="integ-card">
+        <div class="integ-name"><i class="ti ti-brand-whatsapp" aria-hidden="true" style="color:#25D366; font-size:16px; vertical-align:-2px; margin-right:4px"></i>Gupshup / OTP</div>
+        <div class="integ-desc">Disparo e validação de OTP via WhatsApp. Bloqueador técnico do fluxo de cálculo.</div>
+        <div style="margin-top:8px"><span class="badge badge-red" style="font-size:10px">Bloqueador</span></div>
+      </div>
+      <div class="integ-card">
+        <div class="integ-name"><i class="ti ti-calculator" aria-hidden="true" style="color:var(--blue); font-size:16px; vertical-align:-2px; margin-right:4px"></i>Serviço de Cálculo</div>
+        <div class="integ-desc">Integração com serviço interno para simulação dinâmica sem reload.</div>
+        <div style="margin-top:8px"><span class="badge badge-amber" style="font-size:10px">Alta prioridade</span></div>
+      </div>
+      <div class="integ-card">
+        <div class="integ-name"><i class="ti ti-send" aria-hidden="true" style="color:var(--teal); font-size:16px; vertical-align:-2px; margin-right:4px"></i>Stack Operacional</div>
+        <div class="integ-desc">Envio do lead validado com payload, autenticação, logs e rastreabilidade.</div>
+        <div style="margin-top:8px"><span class="badge badge-amber" style="font-size:10px">Alta prioridade</span></div>
+      </div>
+      <div class="integ-card">
+        <div class="integ-name"><i class="ti ti-eye" aria-hidden="true" style="color:var(--purple); font-size:16px; vertical-align:-2px; margin-right:4px"></i>Microsoft Clarity</div>
+        <div class="integ-desc">Telemetria comportamental: origem, abandono, conversão e lead enviado.</div>
+        <div style="margin-top:8px"><span class="badge badge-purple" style="font-size:10px">Média prioridade</span></div>
+      </div>
+    </div>
+
+    <!-- Marcos -->
+    <div class="sec"><i class="ti ti-flag" aria-hidden="true"></i> Marcos do projeto</div>
+
+    <!-- Mini galeria inspiracional -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px">
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&q=80" alt="Carro esportivo" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 45%">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">Auto · Porto</div>
+      </div>
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&q=80" alt="Casa moderna" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 40%">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">Imóvel · Porto</div>
+      </div>
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80" alt="Sedan premium" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 55%">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">Auto · Itaú</div>
+      </div>
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80" alt="Condomínio luxo" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 35%">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">Imóvel · Itaú</div>
+      </div>
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80" alt="Mobile OTP" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">OTP WhatsApp</div>
+      </div>
+      <div style="position:relative;height:90px;border-radius:var(--radius-sm);overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&q=80" alt="Lead captação digital" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+        <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:500;color:#fff">Captação digital</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="overflow-x:auto">
+        <table style="width:100%; border-collapse:collapse; font-size:12px; min-width:600px">
+          <thead>
+            <tr style="background:var(--surface2)">
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">#</th>
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Marco</th>
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Semana</th>
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Responsável</th>
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Entregável</th>
+              <th style="padding:8px 10px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Assinatura do contrato</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-blue" style="font-size:10px">Pré-projeto</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Cliente + CAVA</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Contrato assinado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-green" style="font-size:10px">Marco</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Aprovação do Projeto</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-blue" style="font-size:10px">Semana 1</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Patrocinadores / PMO</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Autorização formal</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Validação do levantamento, premissas e dependências</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-blue" style="font-size:10px">Semana 1</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">PMO + Comitê</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Levantamento validado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Validação do racional de UX com stakeholders</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-purple" style="font-size:10px">Semana 2</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Stakeholders + UX/UI</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Wireframes aprovados</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Aprovação UI/protótipo e prontidão para desenvolvimento</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-purple" style="font-size:10px">Semana 3</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Comitê do Projeto</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Protótipo aprovado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Marco de setup técnico aprovado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-teal" style="font-size:10px">Semana 4</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Tech Lead + PMO</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Setup técnico aprovado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Marco de OTP/Gupshup validado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-teal" style="font-size:10px">Semana 5</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Tech Lead + QA</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">OTP validado tecnicamente</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Marco de fluxo ponta a ponta validado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-teal" style="font-size:10px">Semana 6</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Tech Lead + PMO + Produto</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Fluxo completo validado</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)">Go/No-Go e aceite de homologação</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Semana 7</span></td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Comitê do Projeto</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border); color:var(--text2)">Aceite para publicação</td><td style="padding:7px 10px; border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+            <tr><td style="padding:7px 10px"><span style="display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:2px; transform:rotate(45deg)"></span></td><td style="padding:7px 10px">Aceite final e encerramento da fase contratada</td><td style="padding:7px 10px"><span class="badge badge-coral" style="font-size:10px">Semana 8</span></td><td style="padding:7px 10px; color:var(--text2)">Patrocinadores + PMO</td><td style="padding:7px 10px; color:var(--text2)">Termo de aceite/encerramento</td><td style="padding:7px 10px"><span class="badge badge-amber" style="font-size:10px">Planejado</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: GANTT -->
+  <div id="tab-gantt" class="tab-content">
+    <div style="position:relative;width:100%;height:120px;border-radius:var(--radius);overflow:hidden;margin-bottom:16px;border:0.5px solid var(--border)">
+      <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1400&q=85" alt="Automóvel SUV luxo" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 60%">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,15,40,0.85) 0%,rgba(5,15,40,0.40) 60%,transparent 100%);display:flex;align-items:center;padding:0 28px">
+        <div>
+          <div style="font-size:18px;font-weight:500;color:#fff;margin-bottom:3px">Gantt Executivo — 31 atividades</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.70)">Sem 1 (10/06) → Sem 8 (03/08/2026) · Caminho crítico total</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-gantt" aria-hidden="true"></i> Cronograma Gantt Executivo — 8 semanas</div>
+      <div class="gantt-wrap">
+        <table class="gantt">
+          <thead>
+            <tr>
+              <th style="width:30px">ID</th>
+              <th style="min-width:220px">Atividade</th>
+              <th style="min-width:100px">Frente</th>
+              <th style="min-width:60px">Início</th>
+              <th style="min-width:60px">Fim</th>
+              <th class="week-header" style="min-width:70px">Sem 1<br><span style="font-weight:400;font-size:10px">10/06–16/06</span></th>
+              <th class="week-header" style="min-width:70px">Sem 2<br><span style="font-weight:400;font-size:10px">17/06–23/06</span></th>
+              <th class="week-header" style="min-width:70px">Sem 3<br><span style="font-weight:400;font-size:10px">24/06–30/06</span></th>
+              <th class="week-header" style="min-width:70px">Sem 4<br><span style="font-weight:400;font-size:10px">01/07–07/07</span></th>
+              <th class="week-header" style="min-width:70px">Sem 5<br><span style="font-weight:400;font-size:10px">08/07–14/07</span></th>
+              <th class="week-header" style="min-width:70px">Sem 6<br><span style="font-weight:400;font-size:10px">15/07–21/07</span></th>
+              <th class="week-header" style="min-width:70px">Sem 7<br><span style="font-weight:400;font-size:10px">22/07–28/07</span></th>
+              <th class="week-header" style="min-width:70px">Sem 8<br><span style="font-weight:400;font-size:10px">29/07–04/08</span></th>
+            </tr>
+          </thead>
+          <tbody id="gantt-body"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:16px; flex-wrap:wrap; font-size:11px; color:var(--text2)">
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:20px;height:8px;background:var(--blue);border-radius:3px;opacity:.85"></span>Atividade</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;background:var(--amber);border-radius:2px;transform:rotate(45deg)"></span>Marco</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:20px;height:8px;background:#E24B4A;border-radius:3px;opacity:.85"></span>Caminho crítico</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: TIMELINE -->
+  <div id="tab-timeline" class="tab-content">
+    <div style="position:relative;width:100%;height:170px;border-radius:var(--radius);overflow:hidden;margin-bottom:18px;border:0.5px solid var(--border)">
+      <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&q=85" alt="Equipe de projeto" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 35%">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,15,40,0.80) 0%,rgba(5,15,40,0.30) 100%);display:flex;align-items:center;padding:0 32px">
+        <div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px">Cronograma semanal</div>
+          <div style="font-size:20px;font-weight:500;color:#fff;margin-bottom:4px">8 semanas · 10/06 → 03/08/2026</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.72)">Discovery → UX → UI → Dev → OTP → Cálculo → QA → Entrega</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-timeline" aria-hidden="true"></i> Timeline semanal</div>
+        <div class="timeline" id="timeline-content"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-list" aria-hidden="true"></i> Cronograma detalhado — todas as atividades</div>
+        <div style="overflow-x:auto">
+          <table style="width:100%; border-collapse:collapse; font-size:12px">
+            <thead>
+              <tr style="background:var(--surface2)">
+                <th style="padding:6px 8px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">ID</th>
+                <th style="padding:6px 8px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Atividade</th>
+                <th style="padding:6px 8px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Responsável</th>
+                <th style="padding:6px 8px; text-align:left; font-weight:500; color:var(--text2); border-bottom:0.5px solid var(--border2)">Tipo</th>
+              </tr>
+            </thead>
+            <tbody id="detail-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PENDÊNCIAS -->
+  <div id="tab-pendencias" class="tab-content">
+    <div style="position:relative;width:100%;height:110px;border-radius:var(--radius);overflow:hidden;margin-bottom:16px;border:0.5px solid var(--border)">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85" alt="Casa moderna pendências" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 50%">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(80,20,0,0.82) 0%,rgba(80,20,0,0.30) 100%);display:flex;align-items:center;padding:0 28px">
+        <div>
+          <div style="font-size:18px;font-weight:500;color:#fff;margin-bottom:3px">Matriz de Pendências — 13 itens</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.70)">Pontos críticos que precisam de confirmação para garantir o prazo de 8 semanas</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Matriz de pendências e pontos de confirmação</div>
+      <div style="overflow-x:auto">
+        <table class="pend-table">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Tema</th>
+              <th>Ponto a confirmar</th>
+              <th>Responsável</th>
+              <th>Prazo</th>
+              <th>Impacto</th>
+              <th>Prioridade</th>
+              <th>Ação recomendada</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="pend-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CAMINHO CRÍTICO -->
+  <div id="tab-critico" class="tab-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;height:140px;border-radius:var(--radius);overflow:hidden;margin-bottom:18px">
+      <div style="position:relative;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=700&q=85" alt="Automóvel consórcio caminho crítico" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 55%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.60) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:10px;left:14px;font-size:12px;font-weight:500;color:#fff"><i class="ti ti-car" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Consórcio Automóvel</div>
+      </div>
+      <div style="position:relative;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=85" alt="Imóvel consórcio caminho crítico" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 40%">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,0.60) 0%,transparent 60%)"></div>
+        <div style="position:absolute;bottom:10px;left:14px;font-size:12px;font-weight:500;color:#fff"><i class="ti ti-building" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Consórcio Imóvel</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-route" aria-hidden="true"></i> Caminho crítico — 31 atividades</div>
+        <div id="cc-list"></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title"><i class="ti ti-alert-circle" aria-hidden="true"></i> Riscos e mitigações</div>
+          <div id="risks-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="ti ti-shield" aria-hidden="true"></i> Premissas técnicas críticas</div>
+          <div style="font-size:12.5px; color:var(--text2); line-height:1.8">
+            <p style="margin-bottom:6px"><strong style="color:var(--text1)">Regras de fluxo:</strong></p>
+            <p>• Sem OTP validado → não há cálculo</p>
+            <p>• Sem cálculo carregado → CTA final não aparece</p>
+            <p>• Erros devem permitir continuidade ou retry sem reiniciar o fluxo</p>
+            <p style="margin-top:8px; margin-bottom:6px"><strong style="color:var(--text1)">Segurança:</strong></p>
+            <p>• Validade curta de OTP</p>
+            <p>• Limite de tentativas e reenvios</p>
+            <p>• Hash seguro, bloqueio temporário e expiração de sessão</p>
+            <p style="margin-top:8px; margin-bottom:6px"><strong style="color:var(--text1)">Arquitetura:</strong></p>
+            <p>• Front-end dedicado para experiência e renderização</p>
+            <p>• API responsável por OTP, cálculo, envio e auditoria</p>
+            <p>• Banco relacional para leads, regras, resultados e logs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ESCOPO -->
+  <div id="tab-escopo" class="tab-content">
+    <div style="position:relative;width:100%;height:150px;border-radius:var(--radius);overflow:hidden;margin-bottom:18px;border:0.5px solid var(--border)">
+      <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&q=85" alt="Contrato e escopo do projeto" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center 30%">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,40,15,0.82) 0%,rgba(5,40,15,0.25) 100%);display:flex;align-items:center;padding:0 32px">
+        <div>
+          <div style="font-size:20px;font-weight:500;color:#fff;margin-bottom:4px">Escopo, Premissas e Governança</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.75)">O que está dentro e fora do contrato · Premissas técnicas · Ritos executivos</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-check" aria-hidden="true" style="color:var(--green)"></i> Dentro do escopo</div>
+        <div style="display:flex; flex-direction:column; gap:0">
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Workshop de levantamento e definição do fluxo da LP</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Arquitetura de informação e jornada do usuário</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Wireframes e protótipo UX/UI</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>UI final premium e responsiva</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Desenvolvimento front-end</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>API/orquestração de OTP, cálculo e envio do lead</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Banco para leads, OTP, regras, resultados e logs</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Integração com Gupshup, cálculo, stack operacional e Clarity</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Tratamento de estados, erros, retries e gates</span></div>
+          <div class="scope-item"><i class="ti ti-check" style="color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Testes funcionais, homologação e apoio à produção</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-x" aria-hidden="true" style="color:var(--red)"></i> Fora do escopo</div>
+        <div style="display:flex; flex-direction:column; gap:0">
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Motor de decisão comercial e inteligência de priorização</span></div>
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Jornada de nutrição e automações pós-captação</span></div>
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Roteamento avançado entre times e filas</span></div>
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Criação/contratação de contas e licenças de terceiros</span></div>
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Novos módulos além do captador</span></div>
+          <div class="scope-item"><i class="ti ti-x" style="color:var(--red);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Integrações futuras com parceiros externos para contratação digital</span></div>
+        </div>
+        <div style="margin-top:16px; padding:12px; background:var(--amber-bg); border-radius:var(--radius-sm); border:0.5px solid var(--amber)">
+          <div style="font-size:12px; font-weight:500; color:var(--amber-text); margin-bottom:4px"><i class="ti ti-info-circle" aria-hidden="true"></i> Condições gerais</div>
+          <div style="font-size:12px; color:var(--amber-text)">Mudanças relevantes de escopo podem gerar replanejamento de prazo e investimento. Integrações com terceiros dependem de credenciais, documentação e estabilidade dos fornecedores.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Premissas -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title"><i class="ti ti-clipboard-list" aria-hidden="true"></i> Premissas de entrada</div>
+      <div class="grid2">
+        <div style="display:flex; flex-direction:column; gap:0">
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Ofertas: Porto auto, Porto imóvel, Itaú auto e Itaú imóvel</span></div>
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Canais de entrada: links via site e app com parâmetros de origem e campanha</span></div>
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Integrações obrigatórias: Gupshup, cálculo, stack operacional e Microsoft Clarity</span></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0">
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Premissa de UX: jornada em página única, progressão por estados e gates</span></div>
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Início condicionado à aprovação formal da proposta e alinhamento do plano</span></div>
+          <div class="scope-item"><i class="ti ti-chevron-right" style="color:var(--blue);font-size:14px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Cronograma considera disponibilidade de aprovações, acessos e credenciais</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Governança -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-users" aria-hidden="true"></i> Governança executiva</div>
+      <div class="grid2">
+        <div>
+          <p style="font-size:12px; font-weight:500; color:var(--text1); margin-bottom:8px">Ritos recomendados</p>
+          <div style="display:flex; flex-direction:column; gap:0">
+            <div class="scope-item"><i class="ti ti-circle-dot" style="color:var(--purple);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Kickoff formal e validação da matriz de responsabilidades</span></div>
+            <div class="scope-item"><i class="ti ti-circle-dot" style="color:var(--purple);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Checkpoint semanal executivo</span></div>
+            <div class="scope-item"><i class="ti ti-circle-dot" style="color:var(--purple);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Checkpoints técnicos: Gupshup, cálculo, stack operacional e Clarity</span></div>
+            <div class="scope-item"><i class="ti ti-circle-dot" style="color:var(--purple);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Gates de aprovação: levantamento, UX, protótipo, setup, OTP, ponta a ponta, homologação, go-live e aceite final</span></div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:12px; font-weight:500; color:var(--text1); margin-bottom:8px">Pontos críticos para diretoria</p>
+          <div style="display:flex; flex-direction:column; gap:0">
+            <div class="scope-item"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Dependência de credenciais e acessos de terceiros</span></div>
+            <div class="scope-item"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Confirmação dos custos não inclusos</span></div>
+            <div class="scope-item"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Formalização dos critérios de aceite e operação assistida</span></div>
+            <div class="scope-item"><i class="ti ti-alert-triangle" style="color:var(--amber);font-size:13px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><span>Gestão ativa de pendências para preservar o prazo de 8 semanas</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center; padding:24px 0 8px; font-size:11px; color:var(--text3)">
+    CAVA | Dashboard Executivo — ConectCar LP Consórcio &nbsp;·&nbsp; Data-base: 10/06/2026 &nbsp;·&nbsp; Término planejado: 03/08/2026
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[onclick="switchTab(\'' + name + '\')"]').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+const ganttData = [
+  {id:1, title:'Assinatura do contrato', frente:'Comercial', inicio:'10/06', fim:'10/06', dur:0, semana:'Pré-projeto', bars:[0,0,0,0,0,0,0,0], marco:1, col:'#BA7517'},
+  {id:2, title:'Aprovação do Projeto', frente:'Governança', inicio:'11/06', fim:'11/06', dur:0, semana:'Sem 1', bars:[1,0,0,0,0,0,0,0], marco:1, col:'#BA7517'},
+  {id:3, title:'Kickoff e reunião de abertura', frente:'Discovery', inicio:'11/06', fim:'11/06', dur:1, semana:'Sem 1', bars:[1,0,0,0,0,0,0,0], marco:0},
+  {id:4, title:'Entendimento de negócio, ofertas e premissas', frente:'Discovery', inicio:'12/06', fim:'13/06', dur:2, semana:'Sem 1', bars:[1,0,0,0,0,0,0,0], marco:0},
+  {id:5, title:'Mapeamento de integrações, riscos e dependências', frente:'Discovery', inicio:'16/06', fim:'17/06', dur:2, semana:'Sem 1', bars:[1,0,0,0,0,0,0,0], marco:0},
+  {id:6, title:'Validação do levantamento e premissas', frente:'Governança', inicio:'17/06', fim:'17/06', dur:0, semana:'Sem 1', bars:[1,0,0,0,0,0,0,0], marco:1, col:'#BA7517'},
+  {id:7, title:'Arquitetura de informação e jornada do usuário', frente:'UX', inicio:'18/06', fim:'19/06', dur:2, semana:'Sem 2', bars:[0,1,0,0,0,0,0,0], marco:0},
+  {id:8, title:'Desenho do fluxo entrada/OTP/cálculo/envio', frente:'UX', inicio:'20/06', fim:'23/06', dur:2, semana:'Sem 2', bars:[0,1,0,0,0,0,0,0], marco:0},
+  {id:9, title:'Wireframes desktop e mobile', frente:'UX', inicio:'24/06', fim:'25/06', dur:2, semana:'Sem 2', bars:[0,1,1,0,0,0,0,0], marco:0},
+  {id:10, title:'Validação do racional UX com stakeholders', frente:'Governança', inicio:'25/06', fim:'25/06', dur:0, semana:'Sem 2', bars:[0,0,1,0,0,0,0,0], marco:1, col:'#BA7517'},
+  {id:11, title:'Direção visual e composição da interface premium', frente:'UI', inicio:'26/06', fim:'27/06', dur:2, semana:'Sem 3', bars:[0,0,1,0,0,0,0,0], marco:0},
+  {id:12, title:'Componentes, responsividade e estados de tela', frente:'UI', inicio:'30/06', fim:'01/07', dur:2, semana:'Sem 3', bars:[0,0,1,0,0,0,0,0], marco:0},
+  {id:13, title:'Protótipo navegável e handoff para desenvolvimento', frente:'UI', inicio:'02/07', fim:'03/07', dur:2, semana:'Sem 3', bars:[0,0,0,1,0,0,0,0], marco:0},
+  {id:14, title:'Aprovação UI/protótipo — prontidão para dev', frente:'Governança', inicio:'03/07', fim:'03/07', dur:0, semana:'Sem 3', bars:[0,0,0,1,0,0,0,0], marco:1, col:'#BA7517'},
+  {id:15, title:'Setup técnico, estrutura front-end e componentes base', frente:'Front-end', inicio:'04/07', fim:'07/07', dur:2, semana:'Sem 4', bars:[0,0,0,1,0,0,0,0], marco:0},
+  {id:16, title:'Configuração inicial da API, banco e entidades', frente:'Back-end', inicio:'08/07', fim:'09/07', dur:2, semana:'Sem 4', bars:[0,0,0,1,1,0,0,0], marco:0},
+  {id:17, title:'Alinhamento técnico de endpoints, contratos e ambientes', frente:'Arquitetura', inicio:'10/07', fim:'10/07', dur:1, semana:'Sem 4', bars:[0,0,0,0,1,0,0,0], marco:0},
+  {id:18, title:'Marco de setup técnico aprovado', frente:'Governança', inicio:'10/07', fim:'10/07', dur:0, semana:'Sem 4', bars:[0,0,0,0,1,0,0,0], marco:1, col:'#BA7517'},
+  {id:19, title:'Implementação endpoints OTP via WhatsApp/Gupshup', frente:'OTP/Gupshup', inicio:'11/07', fim:'15/07', dur:3, semana:'Sem 5', bars:[0,0,0,0,1,0,0,0], marco:0},
+  {id:20, title:'Sessão, tentativas, expiração, reenvio e erros', frente:'OTP/Segurança', inicio:'16/07', fim:'17/07', dur:2, semana:'Sem 5', bars:[0,0,0,0,0,1,0,0], marco:0},
+  {id:21, title:'Marco de OTP/Gupshup validado', frente:'Integrações', inicio:'17/07', fim:'17/07', dur:0, semana:'Sem 5', bars:[0,0,0,0,0,1,0,0], marco:1, col:'#BA7517'},
+  {id:22, title:'Integração com serviço interno de cálculo', frente:'Cálculo', inicio:'18/07', fim:'21/07', dur:2, semana:'Sem 6', bars:[0,0,0,0,0,1,0,0], marco:0},
+  {id:23, title:'Renderização dinâmica da simulação', frente:'Front-end/Sim.', inicio:'22/07', fim:'22/07', dur:1, semana:'Sem 6', bars:[0,0,0,0,0,1,0,0], marco:0},
+  {id:24, title:'Envio do lead — stack operacional, logs e telemetria', frente:'Envio/Telemetria', inicio:'23/07', fim:'24/07', dur:2, semana:'Sem 6', bars:[0,0,0,0,0,0,1,0], marco:0},
+  {id:25, title:'Marco de fluxo ponta a ponta validado', frente:'Fluxo', inicio:'24/07', fim:'24/07', dur:0, semana:'Sem 6', bars:[0,0,0,0,0,0,1,0], marco:1, col:'#BA7517'},
+  {id:26, title:'QA funcional, responsivo e cenários de falha', frente:'QA', inicio:'25/07', fim:'29/07', dur:3, semana:'Sem 7', bars:[0,0,0,0,0,0,1,0], marco:0},
+  {id:27, title:'Ajustes finos UX/UI, erros e revisão stakeholders', frente:'QA', inicio:'30/07', fim:'31/07', dur:2, semana:'Sem 7', bars:[0,0,0,0,0,0,0,1], marco:0},
+  {id:28, title:'Go/No-Go e aceite de homologação', frente:'Gate', inicio:'31/07', fim:'31/07', dur:0, semana:'Sem 7', bars:[0,0,0,0,0,0,0,1], marco:1, col:'#BA7517'},
+  {id:29, title:'Checklist final de implantação e publicação assistida', frente:'Entrega assistida', inicio:'01/08', fim:'01/08', dur:1, semana:'Sem 8', bars:[0,0,0,0,0,0,0,1], marco:0},
+  {id:30, title:'Entrega técnica, documentação e alinhamento operacional', frente:'Handover', inicio:'04/08', fim:'04/08', dur:1, semana:'Sem 8', bars:[0,0,0,0,0,0,0,1], marco:0},
+  {id:31, title:'Aceite final e encerramento da fase contratada', frente:'Aceite final', inicio:'04/08', fim:'04/08', dur:0, semana:'Sem 8', bars:[0,0,0,0,0,0,0,1], marco:1, col:'#BA7517'},
+];
+
+function buildGantt() {
+  const tb = document.getElementById('gantt-body');
+  const frenteColors = {'Discovery':'#E6F1FB','UX':'#EEEDFE','UI':'#EEEDFE','Front-end':'#E1F5EE','Back-end':'#E1F5EE','Arquitetura':'#E1F5EE','OTP/Gupshup':'#FAEEDA','OTP/Segurança':'#FAEEDA','Integrações':'#FAEEDA','Cálculo':'#E1F5EE','Front-end/Sim.':'#E1F5EE','Envio/Telemetria':'#E1F5EE','Fluxo':'#E1F5EE','QA':'#FCEBEB','Gate':'#FCEBEB','Governança':'#F1EFE8','Comercial':'#F1EFE8','Entrega assistida':'#EAF3DE','Handover':'#EAF3DE','Aceite final':'#EAF3DE'};
+  ganttData.forEach(r => {
+    const tr = document.createElement('tr');
+    const barCols = r.bars.map(b => {
+      if (!b) return '<td style="padding:5px 8px; border-bottom:0.5px solid var(--border); text-align:center"><div class="gantt-empty"></div></td>';
+      if (r.marco) return `<td style="padding:5px 8px; border-bottom:0.5px solid var(--border); text-align:center"><div class="gantt-marco"></div></td>`;
+      return `<td style="padding:5px 8px; border-bottom:0.5px solid var(--border)"><div class="gantt-bar"></div></td>`;
+    }).join('');
+    const fc = frenteColors[r.frente] || '#f5f4f0';
+    tr.innerHTML = `
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); color:var(--text3); font-size:11px">${r.id}</td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); font-size:12px; ${r.marco ? 'font-weight:500' : ''}">${r.marco ? '◆ ' : ''}${r.title}</td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border)"><span style="font-size:10px; padding:2px 6px; border-radius:8px; background:${fc}; color:var(--text1)">${r.frente}</span></td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); font-size:11px; color:var(--text2); white-space:nowrap">${r.inicio}</td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); font-size:11px; color:var(--text2); white-space:nowrap">${r.fim}</td>
+      ${barCols}
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+const timelineWeeks = [
+  {sem:'Semana 1', periodo:'10/06 a 16/06', fase:'Discovery e levantamento', foco:'Kickoff, entendimento de negócio, integrações, premissas e riscos', entregas:'Ata/kickoff; requisitos; mapa de integrações; premissas', marco:'Levantamento validado', resp:'PMO + Fornecedor CAVA', dep:'Aprovação formal, pontos focais e insumos iniciais'},
+  {sem:'Semana 2', periodo:'17/06 a 24/06', fase:'UX', foco:'Arquitetura de experiência e wireframes', entregas:'Arquitetura de informação; fluxo OTP/cálculo/envio; wireframes desktop/mobile', marco:'Wireframes aprovados', resp:'UX Lead', dep:'Regras de negócio e ofertas definidas'},
+  {sem:'Semana 3', periodo:'25/06 a 02/07', fase:'UI', foco:'UI design e protótipo navegável', entregas:'Direção visual; componentes; responsividade; protótipo navegável; handoff', marco:'Protótipo aprovado', resp:'UX/UI', dep:'Aprovação do racional UX'},
+  {sem:'Semana 4', periodo:'03/07 a 09/07', fase:'Setup técnico', foco:'Estrutura de desenvolvimento', entregas:'Estrutura front-end; configuração API/banco; modelagem de entidades; endpoints/contratos', marco:'Setup técnico aprovado', resp:'Tech Lead', dep:'Ambientes, acessos, repositório, documentação técnica'},
+  {sem:'Semana 5', periodo:'10/07 a 16/07', fase:'OTP / Integrações', foco:'Implementação OTP via WhatsApp/Gupshup', entregas:'Request/validate OTP; sessão; tentativas; expiração; reenvio; erros', marco:'OTP validado', resp:'Back-end + Gupshup', dep:'Conta, credenciais, templates e custo/uso do Gupshup'},
+  {sem:'Semana 6', periodo:'17/07 a 23/07', fase:'Cálculo e envio operacional', foco:'Simulação e envio do lead', entregas:'Integração cálculo; renderização dinâmica; envio stack operacional; logs; telemetria', marco:'Fluxo ponta a ponta validado', resp:'Back-end + Operação + BI', dep:'Serviço interno de cálculo e stack operacional disponíveis'},
+  {sem:'Semana 7', periodo:'24/07 a 30/07', fase:'QA e homologação', foco:'Testes, refinamentos e aceite', entregas:'Testes funcionais/responsivos; cenários de falha; ajustes UX/UI; revisão stakeholders', marco:'Go/No-Go homologação', resp:'QA + Comitê', dep:'Ambiente de homologação e critérios de aceite definidos'},
+  {sem:'Semana 8', periodo:'31/07 a 03/08', fase:'Entrega assistida e fechamento', foco:'Publicação, handover e encerramento', entregas:'Checklist implantação; entrega técnica; documentação; aceite final', marco:'Aceite final e encerramento', resp:'PMO + Tech Lead', dep:'Homologação aprovada e janela de publicação definida'},
+];
+
+function buildTimeline() {
+  const tl = document.getElementById('timeline-content');
+  timelineWeeks.forEach(w => {
+    tl.innerHTML += `
+      <div class="tl-item">
+        <div class="tl-dot marco"></div>
+        <div class="tl-week">${w.sem} &nbsp;·&nbsp; ${w.periodo}</div>
+        <div class="tl-title">${w.fase} — ${w.foco}</div>
+        <div class="tl-desc" style="margin-top:3px">${w.entregas}</div>
+        <div style="margin-top:5px; display:flex; flex-wrap:wrap; gap:4px">
+          <span class="tl-deliverable">◆ ${w.marco}</span>
+          <span style="font-size:11px; color:var(--text3); padding:2px 7px; background:var(--surface2); border-radius:10px; display:inline-block; margin-top:0px">${w.resp}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  const dt = document.getElementById('detail-table');
+  ganttData.forEach(r => {
+    const phaseMap = {1:'Iniciação',2:'Iniciação',3:'Iniciação',4:'Iniciação',5:'Iniciação',6:'Iniciação',7:'Planejamento',8:'Planejamento',9:'Planejamento',10:'Planejamento',11:'Planejamento',12:'Planejamento',13:'Planejamento',14:'Planejamento',15:'Execução',16:'Execução',17:'Execução',18:'Execução',19:'Execução',20:'Execução',21:'Execução',22:'Execução',23:'Execução',24:'Execução',25:'Execução',26:'Monitoramento',27:'Monitoramento',28:'Monitoramento',29:'Encerramento',30:'Encerramento',31:'Encerramento'};
+    dt.innerHTML += `<tr>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); color:var(--text3)">${r.id}</td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); font-size:12px">${r.marco ? '◆ ' : ''}<span style="${r.marco ? 'font-weight:500' : ''}">${r.title}</span></td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border); color:var(--text2); font-size:11px">${r.frente}</td>
+      <td style="padding:5px 8px; border-bottom:0.5px solid var(--border)">${r.marco ? '<span class="badge badge-amber" style="font-size:10px">Marco</span>' : '<span class="badge badge-blue" style="font-size:10px">Tarefa</span>'}</td>
+    </tr>`;
+  });
+}
+
+const pendencias = [
+  {n:1, tema:'Escopo', ponto:'Confirmar entregáveis finais, limites do escopo e critérios de aceite.', resp:'CAVA + PMO', prazo:'Próxima reunião', impacto:'Alto', prior:'Alta', acao:'Formalizar em ata e refletir no cronograma base'},
+  {n:2, tema:'Jornada', ponto:'Apresentar fluxo detalhado da jornada em página única, do acesso ao envio do lead.', resp:'Fornecedor CAVA', prazo:'Semana 1', impacto:'Alto', prior:'Alta', acao:'Solicitar desenho do fluxo com gates e estados'},
+  {n:3, tema:'Ofertas', ponto:'Detalhar parametrização de Porto auto, Porto imóvel, Itaú auto e Itaú imóvel.', resp:'CAVA/ConectCar', prazo:'Semana 1', impacto:'Médio/Alto', prior:'Alta', acao:'Validar regras e parâmetros por oferta'},
+  {n:4, tema:'OTP/Gupshup', ponto:'Confirmar conta, credenciais, custos, templates, tentativas, expiração, reenvio e falhas.', resp:'ConectCar + Gupshup', prazo:'Semana 1', impacto:'Alto', prior:'Alta', acao:'Tratar como bloqueador técnico do cálculo'},
+  {n:5, tema:'Cálculo', ponto:'Detalhar integração com serviço interno: parâmetros, regras, retornos e erros.', resp:'Time técnico CAVA', prazo:'Semana 1–2', impacto:'Alto', prior:'Alta', acao:'Realizar sessão técnica de integração'},
+  {n:6, tema:'Envio operacional', ponto:'Confirmar formato de envio à stack operacional, payload, autenticação, retorno e logs.', resp:'CAVA + Operação/CRM', prazo:'Semana 2', impacto:'Alto', prior:'Alta', acao:'Fechar padrão de integração e evidência de recebimento'},
+  {n:7, tema:'LGPD e segurança', ponto:'Confirmar armazenamento, consentimento, política de privacidade, retenção e criptografia.', resp:'Jurídico/LGPD + SI', prazo:'Semana 1–2', impacto:'Alto', prior:'Alta', acao:'Validar antes da homologação e publicação'},
+  {n:8, tema:'Tracking', ponto:'Confirmar eventos Microsoft Clarity e indicadores de origem, abandono e conversão.', resp:'Fornecedor + BI', prazo:'Semana 2', impacto:'Médio', prior:'Média', acao:'Definir dicionário de eventos'},
+  {n:9, tema:'Homologação', ponto:'Apresentar plano de testes, cenários de falha, mobile/desktop/navegadores e aceite formal.', resp:'Fornecedor + QA + PMO', prazo:'Semana 6–7', impacto:'Alto', prior:'Alta', acao:'Criar critério Go/No-Go'},
+  {n:10, tema:'Cronograma', ponto:'Confirmar viabilidade das 8 semanas e dependências de aprovações, acessos e credenciais.', resp:'Fornecedor + PMO', prazo:'Próxima reunião', impacto:'Alto', prior:'Alta', acao:'Validar linha de base e caminho crítico'},
+  {n:11, tema:'Go-live e suporte', ponto:'Detalhar publicação, janela de go-live, operação assistida, SLA, suporte e rollback.', resp:'Fornecedor + TI/Operação', prazo:'Semana 7–8', impacto:'Alto', prior:'Alta', acao:'Definir operação assistida e suporte pós-entrega'},
+  {n:12, tema:'Custos e terceiros', ponto:'Confirmar custos não inclusos: Gupshup, WhatsApp, hospedagem, domínio, licenças, APIs, manutenção.', resp:'Fornecedor + Financeiro', prazo:'Próxima reunião', impacto:'Médio/Alto', prior:'Alta', acao:'Solicitar abertura objetiva dos custos de terceiros'},
+  {n:13, tema:'Governança', ponto:'Definir pontos focais por frente, cadência de reuniões, checkpoints e aprovações formais.', resp:'PMO + Sponsors', prazo:'Próxima reunião', impacto:'Médio/Alto', prior:'Alta', acao:'Formalizar governança em ata de kickoff'},
+];
+
+function buildPendencias() {
+  const tb = document.getElementById('pend-body');
+  pendencias.forEach(p => {
+    const impactClass = p.impacto === 'Alto' ? 'badge-red' : (p.impacto === 'Médio/Alto' ? 'badge-amber' : 'badge-blue');
+    const priorClass = p.prior === 'Alta' ? 'badge-red' : 'badge-amber';
+    tb.innerHTML += `<tr>
+      <td style="border-bottom:0.5px solid var(--border); font-weight:500; color:var(--text2)">${p.n}</td>
+      <td style="border-bottom:0.5px solid var(--border)"><strong>${p.tema}</strong></td>
+      <td style="border-bottom:0.5px solid var(--border); font-size:12px">${p.ponto}</td>
+      <td style="border-bottom:0.5px solid var(--border); font-size:11px; color:var(--text2)">${p.resp}</td>
+      <td style="border-bottom:0.5px solid var(--border); font-size:11px; white-space:nowrap">${p.prazo}</td>
+      <td style="border-bottom:0.5px solid var(--border)"><span class="badge ${impactClass}" style="font-size:10px">${p.impacto}</span></td>
+      <td style="border-bottom:0.5px solid var(--border)"><span class="badge ${priorClass}" style="font-size:10px">${p.prior}</span></td>
+      <td style="border-bottom:0.5px solid var(--border); font-size:11px; color:var(--text2)">${p.acao}</td>
+      <td style="border-bottom:0.5px solid var(--border)"><span class="badge badge-amber" style="font-size:10px">Aberto</span></td>
+    </tr>`;
+  });
+}
+
+const respMap = {1:'Cliente + CAVA',2:'Patrocinadores / PMO',3:'PMO + CAVA + ConectCar',4:'CAVA + Produto/Negócio',5:'Tech Lead + PMO',6:'PMO + Comitê',7:'UX Lead',8:'UX + Produto + Tech',9:'UX/UI',10:'Stakeholders + UX/UI',11:'UI Designer',12:'UI Designer + UX',13:'UX/UI + Front-end',14:'Comitê do Projeto',15:'Front-end + Tech Lead',16:'Back-end + Dados',17:'Tech Lead + Integrações',18:'Tech Lead + PMO',19:'Back-end + Gupshup',20:'Back-end + Segurança',21:'Tech Lead + QA',22:'Back-end + Time Cálculo',23:'Front-end + Back-end',24:'Back-end + Operação + BI',25:'Tech Lead + PMO + Produto',26:'QA + Tech',27:'QA + UX/UI + Stakeholders',28:'Comitê do Projeto',29:'Tech + PMO + Operação',30:'PMO + Tech Lead',31:'Patrocinadores + PMO'};
+const riskMap = {4:'Depende de conta, credenciais, template e documentação Gupshup',5:'Mapeamento de integrações obrigatórias críticas',6:'Sem validação da Semana 1, UX fica exposto a retrabalho',18:'Sem setup aprovado, integrações da Semana 5 ficam em risco',19:'Depende de conta, credenciais, template e documentação Gupshup',21:'Sem OTP validado não há avanço seguro para cálculo',25:'Marco antecede QA formal e homologação',28:'Critério formal para publicação e operação assistida'};
+
+function buildCritico() {
+  const cl = document.getElementById('cc-list');
+  ganttData.forEach(r => {
+    const isMarco = r.marco;
+    cl.innerHTML += `
+      <div class="cc-row">
+        <div class="cc-num">${r.id}</div>
+        <div class="cc-body">
+          <div class="cc-title" style="${isMarco ? 'color:var(--amber-text)' : ''}">${isMarco ? '◆ ' : ''}${r.title}</div>
+          <div class="cc-meta">
+            <span style="color:var(--text3)">${r.inicio} → ${r.fim}</span>
+            <span style="background:var(--surface2); padding:1px 6px; border-radius:8px">${r.frente}</span>
+            <span style="color:var(--text3)">${respMap[r.id] || ''}</span>
+          </div>
+        </div>
+        <div>${isMarco ? '<span class="badge badge-amber" style="font-size:10px">Marco</span>' : '<span class="badge badge-blue" style="font-size:10px">Tarefa</span>'}</div>
+      </div>
+    `;
+  });
+
+  const rl = document.getElementById('risks-list');
+  const risks = [
+    {title:'Credenciais e acessos Gupshup', mitig:'Tratar como bloqueador técnico desde a Semana 1'},
+    {title:'Aprovações formais atrasadas', mitig:'Checkpoints semanais e gestão ativa de pendências'},
+    {title:'Serviço interno de cálculo indisponível', mitig:'Sessão técnica na Semana 2 para alinhar contratos'},
+    {title:'Stack operacional não documentada', mitig:'Fechar padrão de integração na Semana 2'},
+    {title:'Alterações relevantes de escopo', mitig:'Replanejamento formal de prazo e investimento'},
+    {title:'LGPD/segurança não validada', mitig:'Validar antes da homologação e publicação'},
+  ];
+  risks.forEach(r => {
+    rl.innerHTML += `<div class="risk-item"><div class="risk-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> ${r.title}</div><div class="risk-mitig">${r.mitig}</div></div>`;
+  });
+}
+
+buildGantt();
+buildTimeline();
+buildPendencias();
+buildCritico();
+</script>
+</body>
+</html>
